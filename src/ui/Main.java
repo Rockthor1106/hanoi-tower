@@ -1,13 +1,15 @@
 package ui;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Scanner;
+import java.util.ArrayList;
 
 
 public class Main {
-	
 	
 	//Towers
 	private static int t1 = 1;
@@ -20,25 +22,44 @@ public class Main {
 	private static int discs_t3;
 	
 	private static PrintWriter pWriter;
+	private static BufferedReader bReader;
 	
 	
 	public static void main(String[] args) throws IOException {
-		Scanner sc = new Scanner(System.in);
 		File file = new File("output.txt");
+		FileReader fileReader = new FileReader("input.txt");
 		pWriter = new PrintWriter(file);
-
-		int discs = sc.nextInt();
-		discs_t1 = discs;
-
-		pWriter.println(discs_t1 + " " + discs_t2 + " " + discs_t3);
-		hanoi(discs, t1, t3, t2);	
-	
-		if (pWriter != null) {
-			pWriter.close();
+		bReader = new BufferedReader(fileReader);
+		String line;
+		int discs;
+		ArrayList<String> input = new ArrayList<String>();
+		
+		try {
+			
+			while ((line = bReader.readLine()) != null) {
+				input.add(line);
+			}
+			bReader.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
+		
+		for (int i = 1; i <= Integer.parseInt(input.get(0)); i++) {
+			discs_t1 = Integer.parseInt(input.get(i));
+			discs = Integer.parseInt(input.get(i));
+			pWriter.println(discs_t1 + " " + discs_t2 + " " + discs_t3);
+			hanoi(discs, t1, t3, t2);
+			
+			pWriter.close();
+			
+		}
+		
+			
 	}
 	
 	public static void hanoi(int discs, int t1, int t3, int t2) {
+
 		if (discs == 1) {
 			showAnswers(t1, t3);
 			return;
